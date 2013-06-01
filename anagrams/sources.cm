@@ -1,0 +1,9 @@
+group is
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  trie.sig
+  trie.sml
+  
+  anagram.sig
+  anagram.sml
