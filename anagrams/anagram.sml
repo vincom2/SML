@@ -1,5 +1,5 @@
-structure AnagramDict : ANAGRAM = struct
-  structure D = WordDict
+functor AnagramDict (Dict : TRIE where type myword = string) : ANAGRAMDICT = struct
+  structure D = Dict
   type wordlist = D.myword list
 
   val empty = D.empty
@@ -13,7 +13,7 @@ structure AnagramDict : ANAGRAM = struct
   fun find (d, w) =
       let
         val sw = String.implode (ListMergeSort.sort Char.>= (String.explode w))
-        val _ = print ("looking up " ^ sw ^ "\n")
+        (*val _ = print ("looking up " ^ sw ^ "\n")*)
       in
         D.lookup(d,sw)
       end
@@ -21,7 +21,7 @@ structure AnagramDict : ANAGRAM = struct
   fun add (d, w) =
       let
         val sw = String.implode (ListMergeSort.sort Char.>= (String.explode w))
-        val _ = print ("adding to " ^ sw ^ "\n")
+        (*val _ = print ("adding to " ^ sw ^ "\n")*)
       in
         case find(d,sw) of
         NONE => D.insert(d, sw, [w])
