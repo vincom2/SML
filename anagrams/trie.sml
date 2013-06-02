@@ -3,9 +3,9 @@ structure WordDict : TRIE = struct
   datatype 'a dict = Trie of ('a dict * 'a option) Vector.vector | Empty
 
   (* assumes ASCII *)
-  fun char_pos c = let val c' = Char.toLower c in (Char.ord c') - 97 end
+  fun char_pos c = if not (Char.isAlpha c) then 26
+      else let val c' = Char.toLower c in (Char.ord c') - 97 end
 
-  (*val empty = Trie(Vector.tabulate(26, fn n => (false,Empty)))*)
   val empty = Empty
 
   fun lookup' (Empty, _) = NONE
@@ -19,16 +19,16 @@ structure WordDict : TRIE = struct
   
   fun insert' (d, [], _) = d
     | insert' (Empty, [c], a) = let val m = char_pos c in
-      Trie(Vector.tabulate(26, fn n => if n = m then (Empty,SOME a) else (Empty,NONE))) end
+      Trie(Vector.tabulate(27, fn n => if n = m then (Empty,SOME a) else (Empty,NONE))) end
     | insert' (Trie d, [c], a) = let val m = char_pos c in
-      Trie(Vector.tabulate(26, fn n =>
+      Trie(Vector.tabulate(27, fn n =>
         if n = m then let val (d2,_) = Vector.sub(d, m) in
         (d2,SOME a) end
         else Vector.sub(d, n))) end
     | insert' (Empty, c::cs, a) = let val m = char_pos c in
-      Trie(Vector.tabulate(26, fn n => if n = m then (insert'(Empty,cs,a),NONE) else (Empty,NONE))) end
+      Trie(Vector.tabulate(27, fn n => if n = m then (insert'(Empty,cs,a),NONE) else (Empty,NONE))) end
     | insert' (Trie d, c::cs, a) = let val m = char_pos c in
-      Trie(Vector.tabulate(26, fn n =>
+      Trie(Vector.tabulate(27, fn n =>
         if n = m then let val (d2,a') = Vector.sub(d,m) in
         (insert'(d2,cs,a),a') end
         else Vector.sub(d,n))) end
