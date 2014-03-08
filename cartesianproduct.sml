@@ -13,3 +13,12 @@ fun cross3 (l1,l2,l3) =
     in
       List.map (fn (a, (b,c)) => (a,b,c)) l''
     end
+
+fun cartesian [] = []
+  | cartesian [x] = List.map (fn e => [e]) x
+  | cartesian (x::xs) =
+    let
+      val tail = cartesian xs
+    in
+      List.concat (List.map (fn e1 => List.map (fn e2 => e1::e2) tail) x)
+    end
